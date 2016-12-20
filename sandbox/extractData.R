@@ -15,6 +15,9 @@ dimnames=list(subNameList, c("propMajor","propRefInMajorComp","phiMajor"))
 allModelTh<- matrix(nrow=length(subNameList), ncol=3, dimnames=dimnames)
 allModelPh<- matrix(nrow=length(subNameList), ncol=3, dimnames=dimnames)
 
+allComponentTh<- vector(length=8, mode="list")
+allComponentPh<- vector(length=8, mode="list")
+
 columnIndex <- split( matrix(paste( c("f","p1","phi"), rep(1:6,each=3), sep="."),
     ncol=6), rep(1:6, each = 3))
 #list(c("f.1","p1.1","phi.1"), c("f.2","p1.2","phi.2") )
@@ -38,10 +41,21 @@ for(p in length(subNameList):1 ){
     maxIndex<- which.max(maxModel[[BICIndexList[p]-1]]$f)
     allModelTh[p,]<- maxModel[[BICIndexList[p]-1]]$vecParams[columnIndex[[maxIndex]]]
 
+    fOrder<- rev(order(maxModel[[BICIndexList[p]-1]]$f))
+    allComponentTh[[p]]<-  cbind(maxModel[[BICIndexList[p]-1]]$f[fOrder], maxModel[[BICIndexList[p]-1]]$params[fOrder,1:2] )
+    colnames(allComponentTh[[p]])<- c("ProportionInComponent", "ProportionRefInComponent", "phiInComponent")
+
+
     maxIndex<- which.max(maxModel[[BicPhIndex[p]*2]]$f)
     allModelPh[p,]<- maxModel[[BicPhIndex[p]*2]]$vecParams[columnIndex[[maxIndex]]]
 
+    fOrder<- rev(order(maxModel[[BicPhIndex[p]*2]]$f))
+    allComponentPh[[p]]<-  cbind(maxModel[[BicPhIndex[p]*2]]$f[fOrder], maxModel[[BicPhIndex[p]*2]]$params[fOrder,1:2] )
+    colnames(allComponentPh[[p]])<- c("ProportionInComponent", "ProportionRefInComponent", "phiInComponent")
+
 }
+names(allComponentPh) <- subNameList
+names(allComponentTh) <- subNameList
 allModelTh<- cbind(allModelTh, BicThIndex)
 allModelPh<- cbind(allModelPh, BicPhIndex)
 
@@ -55,3 +69,6 @@ boxplot(cbind(allModelTh[,1],allModelPh[,2]))
 
 #save(allModelTh, file="allModelTh.RData")
 #save(allModelPh, file="allModelPh.RData")
+
+#save(allComponentPh, file="allComponentPh.RData")
+#save(allComponentTh, file="allComponentTh.RData")
