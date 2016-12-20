@@ -15,7 +15,9 @@ dimnames=list(subNameList, c("propMajor","propRefInMajorComp","phiMajor"))
 allModelTh<- matrix(nrow=length(subNameList), ncol=3, dimnames=dimnames)
 allModelPh<- matrix(nrow=length(subNameList), ncol=3, dimnames=dimnames)
 
-columnIndex <- list(c("f.1","p1.1","phi.1"), c("f.2","p1.2","phi.2") )
+columnIndex <- split( matrix(paste( c("f","p1","phi"), rep(1:6,each=3), sep="."),
+    ncol=6), rep(1:6, each = 3))
+#list(c("f.1","p1.1","phi.1"), c("f.2","p1.2","phi.2") )
 
 dataDir<- "/home/steven/Postdoc2/Project_MDM/CEU/"
 
@@ -33,14 +35,15 @@ for(p in length(subNameList):1 ){
     maxModel<- loadMaxModel(fullPath, subName, loadData, isCEU, isRscriptMode)
     ## Need to change 'pwd' in loadMaxModel to "github:CartwrightLab/labpubs/papers/DiriMulti/data/CEU/"
 
-    maxIndex<- which.max(maxModel[[3]]$f)
-    allModelTh[p,]<- maxModel[[3]]$vecParams[columnIndex[[maxIndex]]]
+    maxIndex<- which.max(maxModel[[BICIndexList[p]-1]]$f)
+    allModelTh[p,]<- maxModel[[BICIndexList[p]-1]]$vecParams[columnIndex[[maxIndex]]]
 
-    maxIndex<- which.max(maxModel[[4]]$f)
-    allModelPh[p,]<- maxModel[[4]]$vecParams[columnIndex[[maxIndex]]]
+    maxIndex<- which.max(maxModel[[BicPhIndex[p]*2]]$f)
+    allModelPh[p,]<- maxModel[[BicPhIndex[p]*2]]$vecParams[columnIndex[[maxIndex]]]
 
 }
-
+allModelTh<- cbind(allModelTh, BicThIndex)
+allModelPh<- cbind(allModelPh, BicPhIndex)
 
 newOrder<- c( rev(grep("C21", subNameList)), rev(grep("C10", subNameList))  )
 plotDataPh <- allModelPh[newOrder,1]
@@ -48,3 +51,7 @@ plotDataTh <- allModelTh[newOrder,1]
 
 # something like this?
 boxplot(cbind(allModelTh[,1],allModelPh[,2]))
+
+
+#save(allModelTh, file="allModelTh.RData")
+#save(allModelPh, file="allModelPh.RData")
