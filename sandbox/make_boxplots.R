@@ -1,5 +1,7 @@
 library(reshape2)
 library(ggplot2)
+library(gridExtra)
+library(grid)
 
 setwd("~/Desktop/ASU/WuEtAl2016/sandbox")
 load("allComponentPh.RData")
@@ -31,19 +33,33 @@ all_long<-rbind(TH_long,PH_long)
 all_long$component<-as.numeric(gsub('m','',as.character(all_long$component)))
 
 #plot proportion ref for component
-all_long %>% filter(measure=='phiInComponent') %>%
+p1<-all_long %>% filter(measure=='phiInComponent') %>%
   ggplot(aes(component,value,group=component))+geom_boxplot()+
   labs(y='Proportion of Reference Allele In Component') +
   facet_grid(. ~ dataset)
 
 #plot phi for component
-all_long %>% filter(measure=='ProportionRefInComponent') %>%
+p2<-all_long %>% filter(measure=='ProportionRefInComponent') %>%
   ggplot(aes(component,value,group=component))+geom_boxplot()+
   labs(y='Overdispersion (phi)') +
   facet_grid(. ~ dataset)
 
 #plot prop data in the component
-all_long %>% filter(measure=='ProportionInComponent') %>%
+p3<-all_long %>% filter(measure=='ProportionInComponent') %>%
   ggplot(aes(component,value,group=component))+geom_boxplot()+
   labs(y='Proportion of data') +
   facet_grid(. ~ dataset)
+
+actuallabels <- c(
+  phiInComponent="Proportion of Reference Allele",
+  ProportionRefInComponent="Overdispersion (phi)",
+  ProportionInComponent="Proportion of data"
+)
+
+pdf(file='component_comparison.pdf', width=4, height=9) 
+ggplot(data=all_long,aes(component,value,group=component))+geom_boxplot()+
+  facet_grid(measure ~ dataset, scales="free",labeller=labeller(measure = actuallabels)) +
+  scale_x_continuous(breaks = 1:6,minor_breaks = NULL) + labs(y="")
+dev.off()
+
+
