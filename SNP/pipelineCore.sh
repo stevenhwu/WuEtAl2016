@@ -7,31 +7,57 @@
 
 
 ## Requires the following variables to setup
-datasetName="CEU13_example" #Can be any name
-chromosome=21 #Which chromosome would you like to perforem the analyses on
-chromosomePosition=":9411180-9421180"  #Perfrom analyses on a specific region e.g. chromosomePosition=":10000-20000"
-##chromosomePosition="" #Blank: perform analyses on the whole chromosame.
+#datasetName="CEU13_example" #Can be any name
+#chromosome=21 #Which chromosome would you like to perforem the analyses on
+#chromosomePosition=":9411180-9421180"  #Perfrom analyses on a specific region e.g. chromosomePosition=":10000-20000"
+###chromosomePosition="" #Blank: perform analyses on the whole chromosame.
+#
+#workingDir="./data/${datasetName}_C${chromosome}/"  #Location of the output files
+#scriptDir="./"  #Location of the scripts
+#
+#variableSiteFile="./data/snp_chr21_v3_partial.vcf.gz" #location of known snp files
+#refGenome="./data/human_g1k_v37_c21_partial.fasta" #Location of the reference file
+#dataDir="./data/"   #Location of the datafile
+#dataFiles=('CEU13_NA12878.bam' 'CEU13_NA12892.bam' 'CEU13_NA12891.bam') #File names of each individual
+#
+#parallelCount=3 #Number of parallel jobs
+#numSplitFiles=5 #Number of split files
+#isTrio=1 #1:trio 0:single caller
+#isOriginalCaller=1 #[1|0] # bcftool call:classic mode -c, --consensus-caller  or new mode -m, --multiallelic-caller
+#exome=0 #1: turn on exome analyses
+#exome_file=0 #Location of the exome files
 
-workingDir="./data/${datasetName}_C${chromosome}/"  #Location of the output files
-scriptDir="./"  #Location of the scripts
 
-variableSiteFile="./data/snp_chr21_v3_partial.vcf.gz" #location of known snp files
-refGenome="./data/human_g1k_v37_c21_partial.fasta" #Location of the reference file
-dataDir="./data/"   #Location of the datafile
-dataFiles=('CEU13_NA12878.bam' 'CEU13_NA12892.bam' 'CEU13_NA12891.bam') #File names of each individual
+datasetName="Eucalyptus"
+chromosome="scaffold_1"
+#chromosomePosition=":1-1000"
 
-parallelCount=3 #Number of parallel jobs
-numSplitFiles=5 #Number of split files
-isTrio=1 #1:trio 0:single caller
+workingDir="/home/shwu4/Project_Eucalyptus/WuEtAl2017/SNP/Eu_${chromosome}/"
+workingDir="/tmp/shwu4/Eu_${chromosome}/"
+scriptDir="/home/shwu4/Project_Eucalyptus/WuEtAl2017/SNP/"
+variableSiteFile="NONE"
+#/storage/CEU/ALL.chr${chromosome}.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz"
+refGenome="/storage/eucalyptus_old/remapping3/emel_1_v2/consensus1_ver2.fa"
+
+parallelCount=30
+numSplitFiles=600
 isOriginalCaller=1 #[1|0] # bcftool call:classic mode -c, --consensus-caller  or new mode -m, --multiallelic-caller
-exome=0 #1: turn on exome analyses
-exome_file=0 #Location of the exome files
+isTrio=0
+exome=0
+exome_file=0
+
+dataDir="/storage/eucalyptus_old/remapping3/emel_1_v2/"
+dataFiles="bwa_2.bam"
+
+
 
 ### End of user parameters inputs
 
 
 
 . ${scriptDir}setupParameters.sh
+echo "python2 ${pythonGetBaseCounts} ${chromosome} ${datasetName} ${variableSiteFile} ${workingDir} ${pileupFile}.gz ${pileupExomeFile}"
+exit
 ## Done with setup
 if [ ! -f ${splitFile} ]; then
   echo "===== Build split files for parallel runs ====="

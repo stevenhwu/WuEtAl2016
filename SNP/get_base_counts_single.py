@@ -83,23 +83,23 @@ print('Get variable sites')
 sys.stdout.flush()
 #TODO(SW): Implement a check for file type, gzip or not
 # with open(variable_site_file, 'r') as ref_data:
-with gzip.open(variable_site_file, 'rb') as ref_data:
-    for line in ref_data:      #read line in file
-        if line.startswith(chr):            #skip all initial info lines
-            splitline=line.split()
-            if(len(splitline[3])>1 or len(splitline[4])>1):     #skip indels
-                continue
-            else:
-                if splitline[1] in all_calls['hets']:  #found by us as het
-                    #dictionaries are non-unique because a site found by the trio as one type could be found by single as another
-                    all_calls['hets'][splitline[1]]['variable'] = 1        #note prev found
-                    if all_calls['hets'][splitline[1]]['alt'] is not splitline[4]:        #check alt allele
-                        all_calls['hets'][splitline[1]]['altalt'] = 1
-                if splitline[1] in all_calls['homos_alt']:  #found by us as homoalt
-                    all_calls['homos_alt'][splitline[1]]['variable'] = 1        #note prev found
-                    if all_calls['homos_alt'][splitline[1]]['alt'] is not splitline[4]:        #check alt allele
-                        all_calls['homos_alt'][splitline[1]]['altalt'] = 1
-
+#with gzip.open(variable_site_file, 'rb') as ref_data:
+#    for line in ref_data:      #read line in file
+#        if line.startswith(chr):            #skip all initial info lines
+#            splitline=line.split()
+#            if(len(splitline[3])>1 or len(splitline[4])>1):     #skip indels
+#                continue
+#            else:
+#                if splitline[1] in all_calls['hets']:  #found by us as het
+#                    #dictionaries are non-unique because a site found by the trio as one type could be found by single as another
+#                    all_calls['hets'][splitline[1]]['variable'] = 1        #note prev found
+#                    if all_calls['hets'][splitline[1]]['alt'] is not splitline[4]:        #check alt allele
+#                        all_calls['hets'][splitline[1]]['altalt'] = 1
+#                if splitline[1] in all_calls['homos_alt']:  #found by us as homoalt
+#                    all_calls['homos_alt'][splitline[1]]['variable'] = 1        #note prev found
+#                    if all_calls['homos_alt'][splitline[1]]['alt'] is not splitline[4]:        #check alt allele
+#                        all_calls['homos_alt'][splitline[1]]['altalt'] = 1
+#
 
 label=('pos', 'ref', 'alt', 'As', 'Cs', 'Gs', 'Ts', 'callby', 'snp', 'snpdif', 'Ex')
 title1= '\t'.join(label)+'\n'

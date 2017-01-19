@@ -60,13 +60,13 @@ if [ -z ${scriptDir} ] || [ ! -d ${scriptDir} ]; then
   exit 1
 fi
 
-if [ $isOriginalCaller -eq 1 ]; then
+#if [ $isOriginalCaller -eq 1 ]; then
     echo "===== bcftools original mode ====="
-    workingDir="${workingDir}/original/"
-else
-    echo "===== bcftools multiallec mode ====="
-    workingDir="${workingDir}/multiallelic/"
-fi
+    workingDir="${workingDir}/"
+#else
+#    echo "===== bcftools multiallec mode ====="
+#    workingDir="${workingDir}/multiallelic/"
+#fi
 
 callsSingleDir="${workingDir}calls_single_vcfs/"
 if [ ! -d ${callsSingleDir} ]; then
@@ -85,9 +85,9 @@ else
 fi
 
 runCheckSnpsScript="${scriptDir}checkSnps.sh"
-splitFile="${workindDir}split_chr${chromosome}_${datasetName}.split"
-pileupFile="chr${chromosome}_${datasetName}.pileups"
-pileupExomeFile="chr${chromosome}Ex_${datasetName}.pileups"
+splitFile="${workindDir}split_chr_${chromosome}_${datasetName}.split"
+pileupFile="chr_${chromosome}_${datasetName}.pileups"
+pileupExomeFile="chr_${chromosome}Ex_${datasetName}.pileups"
 
 
 
